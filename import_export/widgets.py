@@ -317,7 +317,7 @@ class ForeignKeyWidget(Widget):
     def render(self, value, obj=None):
         if value is None:
             return ""
-        return getattr(value, self.field)
+        return "{}/${}".format(self.model.__name__, getattr(value, self.field))
 
 
 class ManyToManyWidget(Widget):
@@ -354,4 +354,6 @@ class ManyToManyWidget(Widget):
 
     def render(self, value, obj=None):
         ids = [smart_text(getattr(obj, self.field)) for obj in value.all()]
-        return self.separator.join(ids)
+        if not ids:
+            return ""
+        return "{}/${}".format(self.model.__name__, self.separator.join(ids))
